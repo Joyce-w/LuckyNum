@@ -35,14 +35,17 @@ def submit_data():
     # submit form data to db
     new_lucky = LuckyInfo(name=name, year=year, email=email, color=color)
 
-    # compile random trivia from numbers API 
+    # get random int/fact from API
     rand_num = ran_num()
     resp_num = requests.get(f"http://numbersapi.com/{rand_num}")
     ran_num_fact = resp_num.text
 
+    
+    # get year fact from API
     resp_year = requests.get(f"http://numbersapi.com/{year}/year")
     birth_yr_fact = resp_year.text
 
+    # compile info to return to response data 
     info = {
         "num": {
             "fact": ran_num_fact,
@@ -59,7 +62,6 @@ def submit_data():
     # return new info data to response.data
     return info
 
-
-
+# gen random number for API 
 def ran_num():
     return random.randint(1,100)
