@@ -35,11 +35,31 @@ def submit_data():
     # submit form data to db
     new_lucky = LuckyInfo(name=name, year=year, email=email, color=color)
 
-    db.session.add(new_lucky)
-    db.session.commit()
+    # compile random trivia from numbers API 
+    rand_num = ran_num()
+    resp_num = requests.get(f"http://numbersapi.com/{rand_num}")
+    ran_num_fact = resp_num.text
+
+    resp_year = requests.get(f"http://numbersapi.com/{year}/year")
+    birth_yr_fact = resp_year.text
+
+    info = {
+        "num": {
+            "fact": ran_num_fact,
+            "num": rand_num
+        },
+        "year": {
+            "fact": birth_yr_fact,
+            "year": year
+        }
+    }
+
+    info = jsonify(info)
+
+    # return new info data to response.data
+    return info
 
 
-    # return post data in json
-    res_json = jsonify(new=new_lucky.serialize())
-    return (res_json, 201)
 
+def ran_num():
+    return random.randint(1,100)
